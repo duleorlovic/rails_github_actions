@@ -1,0 +1,18 @@
+# https://github.com/duleorlovic/rails_github_actions/tree/main/.github/workflows/minimum_test.yml
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ruby/setup-ruby@v1
+    - name: Install dependencies
+      run: |
+        gem install bundler
+        bundle install --jobs 4 --retry 3
+    - name: Setup test database
+      run: |
+        bin/rails db:create db:migrate
+    - name: Run tests
+      run: |
+        bundle exec rake
